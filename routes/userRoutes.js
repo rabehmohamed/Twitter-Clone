@@ -26,6 +26,8 @@ router.delete('/profilePhoto',userController.deleteProfilePhoto);
 router.get('/following' , userController.followingList);
 router.get('/followers' , userController.followersList);
 
+router.get('/auth/google',authController.getOAuth);
+router.get('/auth/google/callback',authController.OUathCallback);
 
 
 module.exports = router;

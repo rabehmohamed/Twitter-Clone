@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         lowercase : true,
         validate : [validator.isEmail ,'please provide a valid email'],
     },
+    googleId: {
+        type: String, 
+        select: false,
+    },
     password : 
     {
         type : String,
@@ -105,6 +109,14 @@ userSchema.virtual('userTweets', {
     foreignField : 'postedBy'
 })
 
+userSchema.pre('save', function (next) {
+    if (this.googleId) {
+        this.googleId = this.googleId;
+    } else {
+        delete this.googleId;
+    }
+    next();
+});
 
 userSchema.methods.correctPassword = async function (enteredPassword , userPassword){
     return await bcrypt.compare(enteredPassword , userPassword);

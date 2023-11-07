@@ -1,8 +1,11 @@
+const dotenv = require('dotenv');
+dotenv.config({path : './config.env'});
 const User = require('../models/userModel');
 const { promisify } = require('util');
 const catchAsync = require('./../utils/catchAsync');
 const jwt = require('jsonwebtoken');
 const appError = require('./../utils/appError');
+const axios = require('axios');
 
 const signToken = id => {
     return jwt.sign({ id : id } , process.env.JWT_SECRET , {
@@ -143,3 +146,50 @@ exports.updatePassword = catchAsync ( async (req, res, next) => {
     await user.save();
     createSendToken(user , 200 , res);
 });
+
+//1st part : GET AUTH CODE REQUEST
+exports.getOAuth = catchAsync(async (req,res,next)=>{
+    const googleAuthUrl = 'https://accounts.google.com/o/oauth2/auth';
+    const queryParams = new URLSearchParams({
+        client_id: process.env.OAUTH_CLIENT_ID,
+        redirect_uri: 'http://localhost:5000/auth/google/callback',
+        response_type: 'code',
+        scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+    });
+
+    const authUrl = `${googleAuthUrl}?${queryParams}`;
+    res.redirect(authUrl);
+})
+//2nd part : EXCHANGE AUTH CODE , GET ACCESS TOKEN , GET USER INFO
+exports.OUathCallback = catchAsync(async (req,res,next) => {
+    const { code } = req.query;
+    const googleTokenUrl = 'https://oauth2.googleapis.com/token';
+
+    const tokenResponse = await axios.post(googleTokenUrl, null, {
+        params: {
+          code,
+          client_id: process.env.OAUTH_CLIENT_ID ,
+          client_secret: process.env.OUATH_CLIENT_SECRET,
+          redirect_uri: 'http://localhost:5000/auth/google/callback',
+          grant_type: 'authorization_code',
+        },
+      });
+
+      const googleTokenData = tokenResponse.data;
+      const googleUserInfoUrl = 'https://www.googleapis.com/oauth2/v3/userinfo';
+
+      const userInfoResponse = await axios.get(googleUserInfoUrl, {
+        headers: {
+          Authorization: `Bearer ${googleTokenData.access_token}`,
+        },
+      });
+
+      const user = userInfoResponse.data;
+      const token = signToken({googleId : user.sub});
+      res.status(200).json({
+        message : 'sucess',
+        data : user,
+        token : token
+      })
+
+})
