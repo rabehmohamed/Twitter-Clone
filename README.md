@@ -16,18 +16,7 @@ This project emulates the functionality of Twitter, allowing users to sign up, l
 - **User Authentication:**
   - Sign up and login functionality.
   - OAuth support for Google sign-up.
-
-- **Tweeting Functionality:**
-  - Post tweets with up to 4 photos.
-  - Add and update profile photos.
-  - Comment on tweets.
-  - Like and unlike tweets.
-  - Follow and unfollow users.
-
-- **Search Functionality:**
-  - Search users by name.
-  - Search tweets by content.
-
+ 
 - **Cache Invalidation:**
   - Used Time-to-Live (TTL) for cache invalidation.
   - Invalidate cache when a user deletes their profile.
@@ -40,6 +29,17 @@ This project emulates the functionality of Twitter, allowing users to sign up, l
 - **AWS Services:**
   - AWS S3 for storing user profile/cover photos and tweet photos.
   - Cloudfront CDN integrated with S3 for optimized photo retrieval.
+
+- **Tweeting Functionality:**
+  - Post tweets with up to 4 photos.
+  - Add and update profile photos.
+  - Comment on tweets.
+  - Like and unlike tweets.
+  - Follow and unfollow users.
+
+- **Search Functionality:**
+  - Search users by name.
+  - Search tweets by content.
 
 ## Technologies Used
 - Node.js
