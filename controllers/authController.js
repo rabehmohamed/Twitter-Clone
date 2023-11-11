@@ -184,12 +184,24 @@ exports.OUathCallback = catchAsync(async (req,res,next) => {
         },
       });
 
-      const user = userInfoResponse.data;
-      const token = signToken({googleId : user.sub});
-      res.status(200).json({
-        message : 'sucess',
-        data : user,
-        token : token
-      })
+      const userData = userInfoResponse.data;
+      const existingUser = await User.findOne({ email: userData.email });
 
+    if (existingUser) {
+        res.status(200).json({
+            message: 'success',
+            data: existingUser,
+        });
+    } 
+    else {
+        const newUser = new User({
+            email: userData.email,
+            name: userData.name,
+        });
+        const savedUser = await newUser.save();
+        res.status(200).json({
+            message : 'sucess',
+            data : savedUser,
+      });
+    }
 })

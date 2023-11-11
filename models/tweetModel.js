@@ -65,6 +65,7 @@ const tweetSchema = new mongoose.Schema({
     toObject  : { virtuals : true}
 }
 );
+tweetSchema.index({ content: 'text' });
 
 tweetSchema.pre(/^find/ , function(next){
     this.populate({

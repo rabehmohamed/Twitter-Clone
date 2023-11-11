@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.post('/signup' , authController.signup);
 router.post('/login' , authController.login);
-
 //router.post('/forgotPassword' , authController.forgotPassword);
 router.patch('/resetPassword/:token' , authController.resetPassword);
 
@@ -26,6 +25,7 @@ router.delete('/profilePhoto',userController.deleteProfilePhoto);
 router.get('/following' , userController.followingList);
 router.get('/followers' , userController.followersList);
 
+router.get('/find',userController.searchByName);
 router.get('/auth/google',authController.getOAuth);
 router.get('/auth/google/callback',authController.OUathCallback);
 

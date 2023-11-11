@@ -19,5 +19,6 @@ router.patch('/untweet/:id' , tweetController.untweet);
 router.get('/getLikes/:id' , tweetController.getLikes);
 router.get('/getComments/:id' , tweetController.getComments);
 router.get('/getRetweets/:id' , tweetController.getRetweets);
+router.get('/searchContent', tweetController.searchByContent);
 
 module.exports = router;

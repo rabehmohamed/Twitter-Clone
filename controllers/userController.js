@@ -234,7 +234,21 @@ exports.updateMe = catchAsync( async(req, res, next) => {
 
 });
 
-
+exports.searchByName = catchAsync(async (req,res,next) =>{
+    const name = req.query.name;
+    const results = await User.find({name: { $regex: new RegExp(name, 'i') }});
+    if(results.length > 0){
+        res.status(200).json({
+            message : 'These are the results',
+            data : results
+        });
+    }
+    else {
+        res.status(404).json({
+            message : 'These are the results',
+        });
+    }
+});
 
 
 

@@ -29,11 +29,6 @@ exports.createTweet = catchAsync(async(req,res,next)=>{
     await redisClient.set(`user:${userId}`, JSON.stringify(updatedUser), 'EX', 2000);
     await redisClient.set(`tweet:${tweet._id}`, JSON.stringify(tweet), 'EX', 2000);
 
-    /* const followers = req.user.followers;
-    followers.forEach((followerId) => {
-        io.to(followerId).emit('newTweet', tweet);
-    });
-    io.to(userId).emit('newTweet', tweet); */
 
     res.status(201).json({
         status: 'success',
@@ -174,3 +169,18 @@ async function getTweetPhotos(tweet) {
 }
 
 
+exports.searchByContent = catchAsync(async (req,res,next) =>{
+  const word = req.query.word;
+  const results = await Tweet.find({$text : {$search : word}});
+  if(results.length > 0){
+      res.status(200).json({
+          message : 'These are the results',
+          data : results
+      });
+  }
+  else {
+      res.status(404).json({
+          message : 'These are the results',
+      });
+  }
+});
