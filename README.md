@@ -5,9 +5,6 @@ This project emulates the functionality of Twitter, allowing users to sign up, l
 ## Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
-- [Setup](#setup)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
 - [Performance Optimization](#performance-optimization)
 - [AWS Services](#aws-services)
 - [Error Handling](#error-handling)
